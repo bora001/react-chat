@@ -1,8 +1,14 @@
+import "antd/dist/antd.css";
+import { CenterBoard, ChatBoard, Header } from "./style/styles";
 function App() {
   return (
-    <div className="App">
-      <p>react-chat-setting</p>
-    </div>
+    <CenterBoard>
+      <ChatBoard>
+        <Header>
+          <div>Chat</div>
+        </Header>
+      </ChatBoard>
+    </CenterBoard>
   );
 }
 
