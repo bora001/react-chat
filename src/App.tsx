@@ -1,5 +1,14 @@
+import { SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import { CenterBoard, ChatBoard, Header } from "./style/styles";
+import {
+  CenterBoard,
+  ChatBoard,
+  color,
+  CustomInput,
+  Header,
+  IconBox,
+  InputBox,
+} from "./style/styles";
 function App() {
   return (
     <CenterBoard>
@@ -7,6 +16,16 @@ function App() {
         <Header>
           <div>Chat</div>
         </Header>
+        <InputBox>
+          <CustomInput placeholder="write a message..." />
+          <IconBox>
+            <SendOutlined
+              style={{
+                color: `${color.dark}`,
+              }}
+            />
+          </IconBox>
+        </InputBox>
       </ChatBoard>
     </CenterBoard>
   );

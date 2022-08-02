@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const color = {
   main: "#7f4fc150",
-  dark: "6609e7af",
+  dark: "#6609e7af",
 };
 
 export const MediaQuery = (maxWidth: number): string => {
@@ -38,10 +38,12 @@ export const CenterBoard = styled.div`
 `;
 
 export const ChatBoard = styled.div`
+  position: relative;
   border-radius: 50px;
   width: 500px;
   height: 700px;
   box-shadow: 4px 5px 50px #1703323e;
+  overflow: hidden;
 `;
 
 export const Header = styled.header`
@@ -50,4 +52,33 @@ export const Header = styled.header`
   font-weight: bold;
   font-size: 28px;
   background-color: ${color.main};
+`;
+
+export const InputBox = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #ddd;
+`;
+
+export const CustomInput = styled.input`
+  flex: 5;
+  height: 100%;
+  padding: 20px 0 25px 40px;
+  border: none;
+  outline: none;
+`;
+
+export const IconBox = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  height: 100%;
 `;
