@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const color = {
   main: "#7f4fc150",
   dark: "#6609e7af",
+  inner: "#eaeafb",
 };
 
 export const MediaQuery = (maxWidth: number): string => {
@@ -81,4 +82,8 @@ export const IconBox = styled.div`
   cursor: pointer;
   color: white;
   height: 100%;
+`;
+
+export const PaddingBox = styled.div`
+  padding: 20px;
 `;

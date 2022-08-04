@@ -1,5 +1,6 @@
 import { SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
+import ChatBox from "./component/ChatBox";
 import {
   CenterBoard,
   ChatBoard,
@@ -16,6 +17,7 @@ function App() {
         <Header>
           <div>Chat</div>
         </Header>
+        <ChatBox />
         <InputBox>
           <CustomInput placeholder="write a message..." />
           <IconBox>
