@@ -10,7 +10,9 @@ function ChatBox() {
   console.log(chatlist, "boot");
   return (
     <PaddingBox padding="20px">
-      {chatlist.map((chat) => (chat.type == "bot" ? <BotMsg /> : <UserMsg />))}
+      {chatlist.map((chat) =>
+        chat.type == "bot" ? <BotMsg content={chat.content} /> : <UserMsg />
+      )}
     </PaddingBox>
   );
 }
