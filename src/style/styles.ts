@@ -63,3 +63,8 @@ export const FlexBox = styled.div<CSSProperties>`
   display: flex;
   justify-content: ${(props) => props.justifyContent};
 `;
+
+export const ClearButton = styled.button<CSSProperties>`
+  border: none;
+  background-color: transparent;
+`;
