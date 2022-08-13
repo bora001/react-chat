@@ -3,6 +3,7 @@ import { atom } from "recoil";
 export type ChatType = {
   type: string;
   content: string;
+  image?: string | ArrayBuffer | null;
 };
 
 export const chatHistory = atom<ChatType[]>({

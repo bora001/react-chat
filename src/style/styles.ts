@@ -61,7 +61,10 @@ export const PaddingBox = styled.div<CSSProperties>`
 
 export const FlexBox = styled.div<CSSProperties>`
   display: flex;
+  flex-direction: ${(props) => props.flexDirection};
   justify-content: ${(props) => props.justifyContent};
+  flex: ${(props) => props.flex};
+  align-items: ${(props) => props.alignItems};
 `;
 
 export const ClearButton = styled.button<CSSProperties>`

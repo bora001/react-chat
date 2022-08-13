@@ -17,7 +17,7 @@ function ChatBox() {
           chat.type == "bot" ? (
             <BotMsg key={index} content={chat.content} />
           ) : (
-            <UserMsg key={index} content={chat.content} />
+            <UserMsg key={index} data={chat} />
           )
         )}
       </PaddingBox>

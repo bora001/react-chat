@@ -1,14 +1,20 @@
-import { PictureOutlined, SendOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  CloseCircleTwoTone,
+  PictureOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
 import { Button } from "antd";
+import { read } from "fs";
 import React, { useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { chatHistory, ChatType } from "../store/store";
-import { ClearButton, color } from "../style/styles";
+import { ClearButton, color, FlexBox } from "../style/styles";
 const StyledInputBox = styled.div`
   position: absolute;
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   bottom: 0px;
   display: flex;
   align-items: center;
@@ -17,9 +23,8 @@ const StyledInputBox = styled.div`
 `;
 
 const CustomInput = styled.input`
-  flex: 4;
   height: 100%;
-  padding: 20px 0 25px 40px;
+  padding: 20px 0 20px 40px;
   border: none;
   outline: none;
 `;
@@ -46,17 +51,28 @@ const FileInput = styled.input`
 
 function InputBox() {
   const setChatLog = useSetRecoilState<ChatType[]>(chatHistory);
+  const [inputImage, setInputImage] = React.useState<
+    string | ArrayBuffer | null
+  >();
   const chatLog = useRecoilState(chatHistory);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const removeImg = () => {
+    setInputImage("");
+  };
   const submitData = (e: React.FormEvent) => {
     e.preventDefault();
     const data = inputRef.current?.value;
+    console.log(data);
     if (data) {
-      setChatLog((prev) => [...prev, { type: "user", content: data }]);
+      setChatLog((prev) => [
+        ...prev,
+        { type: "user", content: data, image: inputImage },
+      ]);
       inputRef.current.value = "";
     }
+    setInputImage("");
     console.log(data);
     console.log("submit", chatLog);
   };
@@ -71,16 +87,54 @@ function InputBox() {
 
   const getPic = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
-    console.log("test", target.value);
+    const file = target.files;
+    // if (file !== null) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = reader.result;
+      setInputImage(data);
+    };
+    if (file) reader.readAsDataURL(file[0]);
   };
 
   return (
     <form onSubmit={submitData}>
       <StyledInputBox>
-        <CustomInput placeholder="write a message..." required ref={inputRef} />
+        <FlexBox flexDirection="column" flex="4">
+          <CustomInput
+            placeholder="write a message..."
+            required
+            ref={inputRef}
+          />
+          {inputImage && (
+            <div
+              style={{
+                position: "relative",
+                padding: "0 35px 5px",
+              }}
+            >
+              <CloseCircleTwoTone
+                style={{
+                  zIndex: "99",
+                  position: "absolute",
+                  cursor: "pointer",
+                }}
+                onClick={removeImg}
+                twoToneColor="#9f9d9e"
+              />
+              <img src={inputImage as string} style={{ width: "70px" }} />
+            </div>
+          )}
+        </FlexBox>
+
         <IconBox>
           <FileBox>
-            <FileInput type="file" ref={fileRef} onChange={getPic} />
+            <FileInput
+              type="file"
+              ref={fileRef}
+              accept="image/*"
+              onChange={getPic}
+            />
             <PictureOutlined onClick={addPic} />
           </FileBox>
 
