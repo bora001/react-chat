@@ -40,6 +40,8 @@ export const CenterBoard = styled.div`
 
 export const ChatBoard = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
   border-radius: 50px;
   width: 500px;
   height: 700px;
@@ -48,8 +50,11 @@ export const ChatBoard = styled.div`
 `;
 
 export const Header = styled.header`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
   border-radius: 50px 50px 0 0;
-  padding: 30px 50px 20px;
   font-weight: bold;
   font-size: 28px;
   background-color: ${color.main};
@@ -57,10 +62,13 @@ export const Header = styled.header`
 
 export const PaddingBox = styled.div<CSSProperties>`
   padding: ${(props) => props.padding};
+  overflow-y: ${(props) => props.overflowY};
+  flex: 6;
 `;
 
 export const FlexBox = styled.div<CSSProperties>`
   display: flex;
+  width: ${(props) => props.width};
   flex-direction: ${(props) => props.flexDirection};
   justify-content: ${(props) => props.justifyContent};
   flex: ${(props) => props.flex};

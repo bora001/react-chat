@@ -1,24 +1,28 @@
 import {
-  CloseCircleOutlined,
   CloseCircleTwoTone,
   PictureOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import { Button } from "antd";
-import { read } from "fs";
 import React, { useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { chatHistory, ChatType } from "../store/store";
 import { ClearButton, color, FlexBox } from "../style/styles";
+
+type InputBoxFormType = {
+  img: boolean;
+};
+
+const InputBoxForm = styled.form<InputBoxFormType>`
+  flex: ${({ img }) => (img ? 1.7 : 1)};
+`;
 const StyledInputBox = styled.div`
-  position: absolute;
+  position: relative;
   width: 100%;
   min-height: 60px;
   bottom: 0px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   border-top: 1px solid #ddd;
 `;
 
@@ -49,7 +53,17 @@ const FileInput = styled.input`
   display: none;
 `;
 
-function InputBox() {
+const ImagePreview = styled.div`
+  position: "relative";
+  padding: 0 35px;
+  flex: 3;
+`;
+
+type InputBoxType = {
+  scrollToRef: React.RefObject<HTMLDivElement>;
+};
+
+function InputBox({ scrollToRef }: InputBoxType) {
   const setChatLog = useSetRecoilState<ChatType[]>(chatHistory);
   const [inputImage, setInputImage] = React.useState<
     string | ArrayBuffer | null
@@ -61,10 +75,18 @@ function InputBox() {
   const removeImg = () => {
     setInputImage("");
   };
+
+  React.useEffect(() => {
+    scrollToRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, [chatLog]);
+
   const submitData = (e: React.FormEvent) => {
     e.preventDefault();
     const data = inputRef.current?.value;
-    console.log(data);
     if (data) {
       setChatLog((prev) => [
         ...prev,
@@ -73,8 +95,6 @@ function InputBox() {
       inputRef.current.value = "";
     }
     setInputImage("");
-    console.log(data);
-    console.log("submit", chatLog);
   };
 
   const addPic = (e: React.MouseEvent) => {
@@ -88,7 +108,6 @@ function InputBox() {
   const getPic = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const file = target.files;
-    // if (file !== null) {
     const reader = new FileReader();
     reader.onload = () => {
       const data = reader.result;
@@ -98,57 +117,54 @@ function InputBox() {
   };
 
   return (
-    <form onSubmit={submitData}>
+    <InputBoxForm onSubmit={submitData} img={inputImage ? true : false}>
       <StyledInputBox>
-        <FlexBox flexDirection="column" flex="4">
-          <CustomInput
-            placeholder="write a message..."
-            required
-            ref={inputRef}
-          />
-          {inputImage && (
-            <div
-              style={{
-                position: "relative",
-                padding: "0 35px 5px",
-              }}
-            >
-              <CloseCircleTwoTone
+        <FlexBox alignItems="center" width="100%">
+          <FlexBox flex="4">
+            <CustomInput
+              placeholder="write a message..."
+              required
+              ref={inputRef}
+            />
+          </FlexBox>
+
+          <IconBox>
+            <FileBox>
+              <FileInput
+                type="file"
+                ref={fileRef}
+                accept="image/*"
+                onChange={getPic}
+              />
+              <PictureOutlined onClick={addPic} />
+            </FileBox>
+
+            <ClearButton>
+              <SendOutlined
                 style={{
-                  zIndex: "99",
-                  position: "absolute",
+                  color: `${color.dark}`,
                   cursor: "pointer",
                 }}
-                onClick={removeImg}
-                twoToneColor="#9f9d9e"
               />
-              <img src={inputImage as string} style={{ width: "70px" }} />
-            </div>
-          )}
+            </ClearButton>
+          </IconBox>
         </FlexBox>
-
-        <IconBox>
-          <FileBox>
-            <FileInput
-              type="file"
-              ref={fileRef}
-              accept="image/*"
-              onChange={getPic}
-            />
-            <PictureOutlined onClick={addPic} />
-          </FileBox>
-
-          <ClearButton>
-            <SendOutlined
+        {inputImage && (
+          <ImagePreview>
+            <CloseCircleTwoTone
               style={{
-                color: `${color.dark}`,
+                zIndex: "99",
+                position: "absolute",
                 cursor: "pointer",
               }}
+              onClick={removeImg}
+              twoToneColor="#9f9d9e"
             />
-          </ClearButton>
-        </IconBox>
+            <img src={inputImage as string} style={{ width: "70px" }} />
+          </ImagePreview>
+        )}
       </StyledInputBox>
-    </form>
+    </InputBoxForm>
   );
 }
 

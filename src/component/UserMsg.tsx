@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { ChatType } from "../store/store";
 import { color, FlexBox } from "../style/styles";
@@ -17,7 +16,6 @@ interface UserMsgType {
 }
 
 const UserMsg = ({ data }: UserMsgType) => {
-  console.log(data, "cont");
   const { content, image } = data;
   return (
     <>

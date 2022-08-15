@@ -1,27 +1,34 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRecoilValue } from "recoil";
-import { chatHistory, ChatType } from "../store/store";
+import styled from "styled-components";
+import { chatHistory } from "../store/store";
 import { PaddingBox } from "../style/styles";
 import BotMsg from "./BotMsg";
 import UserMsg from "./UserMsg";
 
-function ChatBox() {
+type ChatBoxType = {
+  scrollToRef: React.RefObject<HTMLDivElement>;
+};
+
+function ChatBox({ scrollToRef }: ChatBoxType) {
   const chatLog = useRecoilValue(chatHistory);
-  useEffect(() => {
-    console.log(chatLog, "home");
-  }, [chatLog]);
+
+  const ScrollBottom = styled.div`
+    margin: 0;
+    padding: 0;
+  `;
+
   return (
-    <>
-      <PaddingBox padding="20px">
-        {chatLog.map((chat, index) =>
-          chat.type == "bot" ? (
-            <BotMsg key={index} content={chat.content} />
-          ) : (
-            <UserMsg key={index} data={chat} />
-          )
-        )}
-      </PaddingBox>
-    </>
+    <PaddingBox padding="20px" overflowY="scroll">
+      {chatLog.map((chat, index) =>
+        chat.type == "bot" ? (
+          <BotMsg key={index} content={chat.content} />
+        ) : (
+          <UserMsg key={index} data={chat} />
+        )
+      )}
+      <ScrollBottom ref={scrollToRef} />
+    </PaddingBox>
   );
 }
 
