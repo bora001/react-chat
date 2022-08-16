@@ -10,13 +10,13 @@ type ChatBoxType = {
   scrollToRef: React.RefObject<HTMLDivElement>;
 };
 
+const ScrollBottom = styled.div`
+  margin: 0;
+  padding: 0;
+`;
+
 function ChatBox({ scrollToRef }: ChatBoxType) {
   const chatLog = useRecoilValue(chatHistory);
-
-  const ScrollBottom = styled.div`
-    margin: 0;
-    padding: 0;
-  `;
 
   return (
     <PaddingBox padding="20px" overflowY="scroll">
