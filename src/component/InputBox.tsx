@@ -83,7 +83,22 @@ function InputBox({ scrollToRef }: InputBoxType) {
       block: "end",
       inline: "nearest",
     });
+    // getLocation();
   }, [chatLog]);
+
+  const getLocation = () => {
+    function success(position: any) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      console.log(latitude, longitude, "LOCATION!");
+    }
+
+    function error() {
+      console.log("error");
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error);
+  };
 
   const checkKeyword = (keyword: string) => {
     switch (keyword) {
