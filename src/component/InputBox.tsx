@@ -4,12 +4,11 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 import React, { useRef } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { chatHistory, ChatType } from "../store/store";
+import { chatHistory, ChatType, weatherInfo } from "../store/store";
 import { ClearButton, color, FlexBox } from "../style/styles";
 import dayjs from "dayjs";
-import axios from "axios";
 
 type InputBoxFormType = {
   img: boolean;
@@ -66,8 +65,9 @@ type InputBoxType = {
 };
 
 function InputBox({ scrollToRef }: InputBoxType) {
-  const API_KEY = process.env.REACT_APP_API_KEY;
   const setChatLog = useSetRecoilState<ChatType[]>(chatHistory);
+  const weatherLog = useRecoilValue(weatherInfo);
+
   const [inputImage, setInputImage] = React.useState<
     string | ArrayBuffer | null
   >();
@@ -86,30 +86,6 @@ function InputBox({ scrollToRef }: InputBoxType) {
       inline: "nearest",
     });
   }, [chatLog]);
-
-  const getLocation = () => {
-    function success(position: any) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      axios
-        .get(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`
-        )
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      console.log(latitude, longitude, "LOCATION!");
-    }
-
-    function error() {
-      console.log("error");
-    }
-
-    navigator.geolocation.getCurrentPosition(success, error);
-  };
 
   const checkKeyword = (keyword: string) => {
     switch (keyword) {
@@ -134,11 +110,15 @@ function InputBox({ scrollToRef }: InputBoxType) {
       case "1":
       case "weather":
       case "Weather":
-        getLocation();
-        // setChatLog((prev) => [
-        //   ...prev,
-        //   { type: "bot", content: `Today weather is sunny!` },
-        // ]);
+        console.log(weatherLog);
+        setChatLog((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            icon: `${weatherLog.icon}`,
+            content: `Today weather is ${weatherLog.title}!`,
+          },
+        ]);
         break;
       case "2":
       case "Time":

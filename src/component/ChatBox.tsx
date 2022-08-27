@@ -22,7 +22,7 @@ function ChatBox({ scrollToRef }: ChatBoxType) {
     <PaddingBox padding="20px" overflowY="scroll">
       {chatLog.map((chat, index) =>
         chat.type == "bot" ? (
-          <BotMsg key={index} content={chat.content} />
+          <BotMsg key={index} content={chat.content} icon={chat.icon} />
         ) : (
           <UserMsg key={index} data={chat} />
         )
