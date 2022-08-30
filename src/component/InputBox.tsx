@@ -28,6 +28,7 @@ const StyledInputBox = styled.div`
 `;
 
 const CustomInput = styled.input`
+  flex: 2;
   height: 100%;
   padding: 20px 0 20px 40px;
   border: none;
@@ -71,6 +72,7 @@ function InputBox({ scrollToRef }: InputBoxType) {
   const [inputImage, setInputImage] = React.useState<
     string | ArrayBuffer | null
   >();
+  const [inputStatus, setInputStatus] = React.useState<boolean>(false);
   const chatLog = useRecoilState(chatHistory);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -142,6 +144,19 @@ function InputBox({ scrollToRef }: InputBoxType) {
           },
         ]);
         break;
+      case "end":
+      case "bye":
+        setInputStatus(true);
+        setChatLog((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: `Thank you! Have a great Day !`,
+          },
+        ]);
+
+        break;
+
       default:
         break;
     }
@@ -181,13 +196,16 @@ function InputBox({ scrollToRef }: InputBoxType) {
     if (file) reader.readAsDataURL(file[0]);
   };
 
+  const reset = () => {};
+
   return (
     <InputBoxForm onSubmit={submitData} img={inputImage ? true : false}>
       <StyledInputBox>
         <FlexBox alignItems="center" width="100%">
           <FlexBox flex="4">
             <CustomInput
-              placeholder="write a message..."
+              placeholder={inputStatus ? "- Chat End -" : "write a message..."}
+              disabled={inputStatus}
               required
               ref={inputRef}
             />
@@ -201,7 +219,7 @@ function InputBox({ scrollToRef }: InputBoxType) {
                 accept="image/*"
                 onChange={getPic}
               />
-              <PictureOutlined onClick={addPic} />
+              <PictureOutlined onClick={inputStatus ? reset : addPic} />
             </FileBox>
 
             <ClearButton>

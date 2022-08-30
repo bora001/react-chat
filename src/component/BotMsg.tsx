@@ -10,7 +10,7 @@ const BotBox = styled.div`
   padding: 10px;
   border-radius: 15px;
 `;
-const BotMsg = ({ content, icon }: { content: string; icon: string }) => {
+const BotMsg = ({ content, icon }: { content: string; icon?: string }) => {
   return (
     <>
       <BotBox>
