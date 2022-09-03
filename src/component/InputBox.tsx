@@ -6,7 +6,7 @@ import {
 import React, { useRef } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { chatHistory, ChatType, weatherInfo } from "../store/store";
+import { chatHistory, ChatType, count, weatherInfo } from "../store/store";
 import { ClearButton, color, FlexBox } from "../style/styles";
 import dayjs from "dayjs";
 
@@ -68,11 +68,12 @@ type InputBoxType = {
 function InputBox({ scrollToRef }: InputBoxType) {
   const setChatLog = useSetRecoilState<ChatType[]>(chatHistory);
   const weatherLog = useRecoilValue(weatherInfo);
+  const setCount = useSetRecoilState<number>(count);
+  const countNum = useRecoilValue(count);
 
   const [inputImage, setInputImage] = React.useState<
     string | ArrayBuffer | null
   >();
-  const [inputStatus, setInputStatus] = React.useState<boolean>(false);
   const chatLog = useRecoilState(chatHistory);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -95,6 +96,8 @@ function InputBox({ scrollToRef }: InputBoxType) {
       case "hi":
       case "hey":
         setChatLog((prev) => [...prev, { type: "bot", content: `Hello 😊` }]);
+        setCount(1);
+
         break;
       case "menu":
       case "help":
@@ -108,6 +111,8 @@ function InputBox({ scrollToRef }: InputBoxType) {
           1 - weather, 2 - time, 3 - Date`,
           },
         ]);
+        setCount(1);
+
         break;
       case "1":
       case "weather":
@@ -121,6 +126,8 @@ function InputBox({ scrollToRef }: InputBoxType) {
             content: `Today weather is ${weatherLog.title}!`,
           },
         ]);
+        setCount(1);
+
         break;
       case "2":
       case "Time":
@@ -132,6 +139,8 @@ function InputBox({ scrollToRef }: InputBoxType) {
             content: `It is ${dayjs().format("hh:mm A")}`,
           },
         ]);
+        setCount(1);
+
         break;
       case "3":
       case "Date":
@@ -143,10 +152,11 @@ function InputBox({ scrollToRef }: InputBoxType) {
             content: `Today is ${dayjs().format("MMMM DD, dddd")}`,
           },
         ]);
+        setCount(1);
+
         break;
       case "end":
       case "bye":
-        setInputStatus(true);
         setChatLog((prev) => [
           ...prev,
           {
@@ -154,10 +164,40 @@ function InputBox({ scrollToRef }: InputBoxType) {
             content: `Thank you! Have a great Day !`,
           },
         ]);
+        setCount(1);
 
         break;
+      case "thanks":
+      case "Thanks":
+      case "Thank you":
+      case "thank you":
+        setChatLog((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: `you are very welcome !`,
+          },
+        ]);
+        setCount(1);
 
+        break;
       default:
+        if (countNum > 5) {
+          setChatLog((prev) => [
+            ...prev,
+            {
+              type: "bot",
+              content: `
+              Sorry, I can not get your question,
+          What can I help you?🤗
+          1 - weather, 2 - time, 3 - Date`,
+            },
+          ]);
+          setCount(1);
+        } else {
+          setCount((prev) => prev + 1);
+        }
+
         break;
     }
   };
@@ -204,8 +244,7 @@ function InputBox({ scrollToRef }: InputBoxType) {
         <FlexBox alignItems="center" width="100%">
           <FlexBox flex="4">
             <CustomInput
-              placeholder={inputStatus ? "- Chat End -" : "write a message..."}
-              disabled={inputStatus}
+              placeholder="write a message..."
               required
               ref={inputRef}
             />
@@ -219,7 +258,7 @@ function InputBox({ scrollToRef }: InputBoxType) {
                 accept="image/*"
                 onChange={getPic}
               />
-              <PictureOutlined onClick={inputStatus ? reset : addPic} />
+              <PictureOutlined onClick={addPic} />
             </FileBox>
 
             <ClearButton>

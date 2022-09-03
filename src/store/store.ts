@@ -4,7 +4,7 @@ export type ChatType = {
   type: string;
   content: string;
   image?: string | ArrayBuffer | null;
-  icon?:string
+  icon?: string;
 };
 
 export type WeatherType = {
@@ -20,4 +20,9 @@ export const chatHistory = atom<ChatType[]>({
 export const weatherInfo = atom<WeatherType>({
   key: "weatherInfo",
   default: { title: "", icon: "" },
+});
+
+export const count = atom<number>({
+  key: "count",
+  default: 1,
 });
