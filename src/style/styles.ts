@@ -30,7 +30,6 @@ export const Content = styled.div`
 `;
 
 export const CenterBoard = styled.div`
-  border: 1px solid blue;
   display: flex;
   align-items: center;
   justify-content: center;
